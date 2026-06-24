@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h2>Hello, {{ session.username }}</h2>
+    <br>
+    <br>
+    <a href="/stock">View Stock</a>
+    <a>Add Product</a>
+    <a>Remove Product</a>
+    <div>
+        <h3>{{ runningout }}</h3>
+        {% if show_p_table %}
+            <table border="1">
+                <tr><th>ID</th> <th>Name</th> <th>Quantity Left</th></tr>
+                {% for p in products %}
+                <tr>
+                    <td>{{ p.id }}</td>
+                    <td>{{ p.name }}</td>
+                    <td>{{ p.quantity }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    </div>
+</body>
+</html>

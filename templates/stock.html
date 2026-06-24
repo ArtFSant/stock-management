@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h2>Hello, {{ session.username }}</h2>
+    <br>
+    <br>
+    <a>View Stock</a>
+    <a>Add Product</a>
+    <a>Remove Product</a>
+    <div>
+        <h3>Stock</h3>
+        <table border="1">
+            <tr><th>ID</th> <th>Name</th> <th>Quantity Left</th></tr>
+            {% for p in products %}
+            <tr>
+                <td>{{ p.id }}</td>
+                <td>{{ p.name }}</td>
+                <td>{{ p.quantity }}</td>
+                <td>
+                    <button class="buy-bt" data-id="{{ p.id }}" data-name="{{ p.name }}" data-quantity="{{ p.quantity }}">Buy</button>
+                </td>
+                <td>
+                    <button class="sell-bt" data-id="{{ p.id }}" data-name="{{ p.name }}" data-quantity="{{ p.quantity }}">Sell</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div id="stock-modal">
+        <div id="modal-content">
+            <span id="close">&times;</span>
+            <p id="product-name">Product: </p>
+            <p id="product-id">ID: </p>
+            <p id="product-quantity">Quantity Left: </p>
+            <form action="/update-stock" method="POST">
+                <input type="number" name="amount" placeholder="Amount" min="1" max="100" required>
+                <input type="hidden" name="hidden-id" id="hidden-id">
+                <input type="hidden" name="ac-type" id="hidden-type">
+                <button id="action" type="submit"></button>
+            </form>
+        </div>
+    </div>
+</body>
+<script defer>
+    document.addEventListener("DOMContentLoaded", function() {
+        const stockModal = document.getElementById("stock-modal");
+        const close = document.getElementById("close");
+
+        const productName = document.getElementById("product-name");
+        const productId = document.getElementById("product-id");
+        const productQuantity = document.getElementById("product-quantity");
+        const action = document.getElementById("action");
+        const hiddenId = document.getElementById("hidden-id");
+        const acType = document.getElementById("ac-type")
+
+        document.querySelectorAll(".buy-bt").forEach(bt=>{
+            bt.addEventListener("click", ()=>{
+                const id = bt.dataset.id;
+                const name = bt.dataset.name;
+                const quantity = bt.dataset.quantity;
+                stockModal.style.display = "flex";
+
+                productName.innerText = `Product: ${name}`;
+                productId.innerText = `ID: ${id}`;
+                productQuantity.innerText = `Quantity Left: ${quantity}`;
+                action.innerText = `Buy`;
+                acType.value = 'buy';
+                hiddenId.value = id;
+            });
+        });
+
+        document.querySelectorAll(".sell-bt").forEach(bt=>{
+            bt.addEventListener("click", ()=>{
+                const id = bt.dataset.id;
+                const name = bt.dataset.name;
+                const quantity = bt.dataset.quantity;
+                stockModal.style.display = "flex";
+
+                productName.innerText = `Product: ${name}`;
+                productId.innerText = `ID: ${id}`;
+                productQuantity.innerText = `Quantity Left: ${quantity}`;
+                action.innerText = `Sell`;
+                acType.value = 'sell';
+                hiddenId.value = id;
+            });
+        });
+    });
+</script>
+</html>
